@@ -4,7 +4,7 @@ module Synthesis
     # class variables
     @@asset_packages_yml = $asset_packages_yml || 
       (File.exists?("#{RAILS_ROOT}/config/asset_packages.yml") ? YAML.load_file("#{RAILS_ROOT}/config/asset_packages.yml") : nil)
-    @@compress_js_file = true
+    @@compress_js_file = nil
   
     # singleton methods
     class << self
@@ -22,7 +22,7 @@ module Synthesis
       end
       
       def compress_js_file?
-        @@compress_js_file
+        @@compress_js_file.nil? ? true : @@compress_js_file
       end
       
       def parse_path(path)

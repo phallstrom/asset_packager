@@ -67,6 +67,11 @@ class AssetPackageHelperDevelopmentTest < Test::Unit::TestCase
       javascript_include_merged(:base, :secondary)
   end
 
+  def test_js_rootlevel_package_name
+    assert_dom_equal build_js_expected_string("/rootlevel/sample", "foo"), 
+      javascript_include_merged(:rootlevel)
+  end
+
   def test_css_basic
     assert_dom_equal build_css_expected_string("screen"),
       stylesheet_link_merged("screen")
@@ -97,4 +102,9 @@ class AssetPackageHelperDevelopmentTest < Test::Unit::TestCase
       stylesheet_link_merged(:base, :secondary, "subdir/styles")
   end
   
+  def test_css_rootlevel_package_name
+    assert_dom_equal build_css_expected_string("/rootlevel/sample", "foo"), 
+      stylesheet_link_merged(:rootlevel)
+  end
+
 end

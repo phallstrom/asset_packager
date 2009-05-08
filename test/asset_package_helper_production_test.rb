@@ -91,6 +91,12 @@ class AssetPackageHelperProductionTest < Test::Unit::TestCase
       javascript_include_merged(:base, :secondary)
   end
   
+  def test_js_rootlevel_package_name
+    package_name = Synthesis::AssetPackage.find_by_target("javascripts", "rootlevel").current_file
+    assert_dom_equal build_js_expected_string(package_name), 
+      javascript_include_merged(:rootlevel)
+  end
+
   def test_css_basic
     current_file = Synthesis::AssetPackage.find_by_source("stylesheets", "screen").current_file
     assert_dom_equal build_css_expected_string(current_file),
@@ -135,6 +141,12 @@ class AssetPackageHelperProductionTest < Test::Unit::TestCase
     package_name3 = Synthesis::AssetPackage.find_by_target("stylesheets", "subdir/styles").current_file
     assert_dom_equal build_css_expected_string(package_name1, package_name2, package_name3), 
       stylesheet_link_merged(:base, :secondary, "subdir/styles")
+  end
+  
+  def test_css_rootlevel_package_name
+    package_name = Synthesis::AssetPackage.find_by_target("stylesheets", "rootlevel").current_file
+    assert_dom_equal build_css_expected_string(package_name), 
+      stylesheet_link_merged(:rootlevel)
   end
   
 end

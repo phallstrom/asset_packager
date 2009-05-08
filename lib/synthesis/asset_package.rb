@@ -4,6 +4,7 @@ module Synthesis
     # class variables
     @@asset_packages_yml = $asset_packages_yml || 
       (File.exists?("#{RAILS_ROOT}/config/asset_packages.yml") ? YAML.load_file("#{RAILS_ROOT}/config/asset_packages.yml") : nil)
+    @@compress_js_file = true
   
     # singleton methods
     class << self
@@ -14,6 +15,14 @@ module Synthesis
       
       def merge_environments
         @@merge_environments ||= ["production"]
+      end
+      
+      def compress_js_file=(bool)
+        @@compress_js_file = bool
+      end
+      
+      def compress_js_file?
+        @@compress_js_file
       end
       
       def parse_path(path)
@@ -156,24 +165,27 @@ module Synthesis
       end
 
       def compress_js(source)
-        jsmin_path = "#{RAILS_ROOT}/vendor/plugins/asset_packager/lib"
-        tmp_path = "#{RAILS_ROOT}/tmp/#{@target}_packaged"
-      
-        # write out to a temp file
-        File.open("#{tmp_path}_uncompressed.js", "w") {|f| f.write(source) }
-      
-        # compress file with JSMin library
-        `ruby #{jsmin_path}/jsmin.rb <#{tmp_path}_uncompressed.js >#{tmp_path}_compressed.js \n`
+        if self.class.compress_js_file?
+          jsmin_path = "#{RAILS_ROOT}/vendor/plugins/asset_packager/lib"
+          tmp_path = "#{RAILS_ROOT}/tmp/#{@target}_packaged"
+        
+          # write out to a temp file
+          File.open("#{tmp_path}_uncompressed.js", "w") {|f| f.write(source) }
+        
+          # compress file with JSMin library
+          `ruby #{jsmin_path}/jsmin.rb <#{tmp_path}_uncompressed.js >#{tmp_path}_compressed.js \n`
 
-        # read it back in and trim it
-        result = ""
-        File.open("#{tmp_path}_compressed.js", "r") { |f| result += f.read.strip }
-  
-        # delete temp files if they exist
-        File.delete("#{tmp_path}_uncompressed.js") if File.exists?("#{tmp_path}_uncompressed.js")
-        File.delete("#{tmp_path}_compressed.js") if File.exists?("#{tmp_path}_compressed.js")
-
-        result
+          # read it back in and trim it
+          result = ""
+          File.open("#{tmp_path}_compressed.js", "r") { |f| result += f.read.strip }
+    
+          # delete temp files if they exist
+          File.delete("#{tmp_path}_uncompressed.js") if File.exists?("#{tmp_path}_uncompressed.js")
+          File.delete("#{tmp_path}_compressed.js") if File.exists?("#{tmp_path}_compressed.js")
+          result
+        else
+          source
+        end
       end
   
       def compress_css(source)

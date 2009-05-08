@@ -19,7 +19,7 @@ class AssetPackagerTest < Test::Unit::TestCase
   
   def test_find_by_type
     js_asset_packages = Synthesis::AssetPackage.find_by_type("javascripts")
-    assert_equal 3, js_asset_packages.length
+    assert_equal 4, js_asset_packages.length
     assert_equal "base", js_asset_packages[0].target
     assert_equal ["prototype", "effects", "controls", "dragdrop"], js_asset_packages[0].sources
   end
@@ -51,12 +51,13 @@ class AssetPackagerTest < Test::Unit::TestCase
     css_package_names = Dir.new("#{$asset_base_path}/stylesheets").entries.delete_if { |x| ! (x =~ /\A\w+_packaged.css/) }.sort
     css_subdir_package_names = Dir.new("#{$asset_base_path}/stylesheets/subdir").entries.delete_if { |x| ! (x =~ /\A\w+_packaged.css/) }.sort
     
-    assert_equal 3, js_package_names.length
+    assert_equal 4, js_package_names.length
     assert_equal 3, css_package_names.length
     assert_equal 1, css_subdir_package_names.length
     assert js_package_names[0].match(/\Abase_packaged.js\z/)
-    assert js_package_names[1].match(/\Arootlevel_packaged.js\z/)
-    assert js_package_names[2].match(/\Asecondary_packaged.js\z/)
+    assert js_package_names[1].match(/\Acompress_test_packaged.js\z/)
+    assert js_package_names[2].match(/\Arootlevel_packaged.js\z/)
+    assert js_package_names[3].match(/\Asecondary_packaged.js\z/)
     assert css_package_names[0].match(/\Abase_packaged.css\z/)
     assert css_package_names[1].match(/\Arootlevel_packaged.css\z/)
     assert css_package_names[2].match(/\Asecondary_packaged.css\z/)

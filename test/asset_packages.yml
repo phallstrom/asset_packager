@@ -11,6 +11,8 @@ javascripts:
 - rootlevel:
   - /rootlevel/sample
   - foo
+- compress_test:
+  - compress_test
 stylesheets:
 - base:
   - screen

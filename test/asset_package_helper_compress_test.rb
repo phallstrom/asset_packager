@@ -52,7 +52,7 @@ class AssetPackageHelperProductionTest < Test::Unit::TestCase
   def test_js_compressed
     Synthesis::AssetPackage.build_all
     output = File.open(Synthesis::AssetPackage.find_by_target("javascripts", "compress_test").full_path).read
-    assert_equal "function compress_test(){var i=0;return(false);}", output
+    assert_equal "function compress_test(){var i=0;return(false);};", output
     Synthesis::AssetPackage.delete_all
   end
 
@@ -61,7 +61,7 @@ class AssetPackageHelperProductionTest < Test::Unit::TestCase
     Synthesis::AssetPackage.build_all
 
     output = File.open(Synthesis::AssetPackage.find_by_target("javascripts", "compress_test").full_path).read.strip
-    input = File.open("#{$asset_base_path}/javascripts/compress_test.js").read.strip
+    input = File.open("#{$asset_base_path}/javascripts/compress_test.js").read.strip + "\n\n;"
     assert_equal input, output
     Synthesis::AssetPackage.delete_all
   end

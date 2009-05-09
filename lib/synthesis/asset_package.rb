@@ -151,7 +151,7 @@ module Synthesis
         @sources.each {|s| 
           file = (s[0,1] == '/' ? ($asset_base_path ? "#{$asset_base_path}" : "#{RAILS_ROOT}/public") : "#{@asset_path}/") + "#{s}.#{@extension}"
           File.open(file, "r") { |f| 
-            merged_file += f.read + "\n" 
+            merged_file += f.read + case @asset_type when "javascripts" then "\n;\n" else "\n" end
           }
         }
         merged_file

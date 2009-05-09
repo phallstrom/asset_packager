@@ -6,6 +6,7 @@ namespace :asset do
 
     desc "Merge and compress assets"
     task :build_all do
+      Synthesis::AssetPackage.compress_js_file = false if ENV['COMPRESS_JS_FILE'] == 'false'
       Synthesis::AssetPackage.build_all
     end
 

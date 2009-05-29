@@ -13,6 +13,8 @@ javascripts:
   - foo
 - compress_test:
   - compress_test
+- dot_test:
+  - dot.test
 stylesheets:
 - base:
   - screen
@@ -26,3 +28,5 @@ stylesheets:
 - rootlevel:
   - /rootlevel/sample
   - foo
+- dot_test:
+  - dot.test

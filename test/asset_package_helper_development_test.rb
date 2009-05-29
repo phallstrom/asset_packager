@@ -72,6 +72,11 @@ class AssetPackageHelperDevelopmentTest < Test::Unit::TestCase
       javascript_include_merged(:rootlevel)
   end
 
+  def test_js_dot_test_package_name
+    assert_dom_equal build_js_expected_string("dot.test.js"), 
+      javascript_include_merged(:dot_test)
+  end
+
   def test_css_basic
     assert_dom_equal build_css_expected_string("screen"),
       stylesheet_link_merged("screen")
@@ -107,4 +112,8 @@ class AssetPackageHelperDevelopmentTest < Test::Unit::TestCase
       stylesheet_link_merged(:rootlevel)
   end
 
+  def test_css_dot_test_package_name
+    assert_dom_equal build_css_expected_string("dot.test.css"), 
+      stylesheet_link_merged(:dot_test)
+  end
 end

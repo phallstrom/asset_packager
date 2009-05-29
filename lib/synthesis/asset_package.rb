@@ -61,6 +61,7 @@ module Synthesis
         targets.each do |target|
           package = find_by_target(asset_type, target)
           source_names += (package ? package.sources.collect do |src|
+            src += '.' + get_extension(asset_type) unless src.index('.').nil? # asset_tag won't append extension when src contains a period
             package.target_dir.gsub(/^(.+)$/, '\1/') + src
           end : target.to_a)
         end
@@ -94,6 +95,13 @@ module Synthesis
           log "Please reorder files under 'base' so dependencies are loaded in correct order."
         else
           log "config/asset_packages.yml already exists. Aborting task..."
+        end
+      end
+
+      def get_extension(asset_type)
+        case asset_type
+          when "javascripts" then "js"
+          when "stylesheets" then "css"
         end
       end
 
@@ -199,10 +207,7 @@ module Synthesis
       end
 
       def get_extension
-        case @asset_type
-          when "javascripts" then "js"
-          when "stylesheets" then "css"
-        end
+        self.class.get_extension(@asset_type)
       end
       
       def log(message)
